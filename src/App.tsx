@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {NewComponent} from "./NewComponent";
 
-function App() {
+export type FilterType = 'All' | 'RUBLS' | 'Dollars'
+
+export function App() {
     const [money, setMoney] = useState([
         {banknots: 'Dollars', value: 100, nominal: ' a1234567890'},
         {banknots: 'Dollars', value: 50, nominal: ' z1234567890'},
@@ -13,7 +15,7 @@ function App() {
         {banknots: 'Dollars', value: 50, nominal: ' x1234567890'},
         {banknots: 'RUBLS', value: 50, nominal: ' v1234567890'},
     ])
-    const [filter, setFilter] = useState('All')
+    const [filter, setFilter] = useState<FilterType>('All')
     let currentMoney = money
     if (filter === 'RUBLS') {
         currentMoney = money.filter((filteredMoney) => filteredMoney.banknots === 'RUBLS')
@@ -21,29 +23,10 @@ function App() {
     if (filter === 'Dollars') {
         currentMoney = money.filter((filteredMoney) => filteredMoney.banknots === 'Dollars')
     }
-    const onClickFilterHandler = (nameButton: string) => {
+    const onClickFilterHandler = (nameButton: FilterType) => {
         setFilter(nameButton)
     }
-    return (
-        <div>
-            <ul className="App">
-                {currentMoney.map((objFromMoneyArr, index: number) => {
-                    return (
-                        <li key={index}>
-                            <span>{objFromMoneyArr.banknots}</span>
-                            <span>{objFromMoneyArr.value}</span>
-                            <span>{objFromMoneyArr.nominal}</span>
-                        </li>
-                    )
-                })}
-            </ul>
-            <div className="App">
-                <button onClick={() => onClickFilterHandler('All')}>All</button>
-                <button onClick={() => onClickFilterHandler('Dollars')}>Dollars</button>
-                <button onClick={() => onClickFilterHandler('RUBLS')}>RUBLS</button>
-            </div>
-        </div>
-    );
+    return <NewComponent money={currentMoney} onClickFilterHandler={onClickFilterHandler}/>
 }
 
 export default App;
