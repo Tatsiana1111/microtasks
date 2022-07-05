@@ -1,32 +1,42 @@
 import React, {useState} from 'react';
 import './App.css';
-import {NewComponent} from "./NewComponent";
+import {FullInput} from "./components/FullInput";
+import {Input} from "./components/Input";
+import {Button} from "./components/Button";
 
-export type FilterType = 'All' | 'RUBLS' | 'Dollars'
+type FillInputPropsType = {
+    addMessage: (title: string) => void
+}
+
 
 export function App() {
-    const [money, setMoney] = useState([
-        {banknots: 'Dollars', value: 100, nominal: ' a1234567890'},
-        {banknots: 'Dollars', value: 50, nominal: ' z1234567890'},
-        {banknots: 'RUBLS', value: 100, nominal: ' w1234567890'},
-        {banknots: 'Dollars', value: 100, nominal: ' e1234567890'},
-        {banknots: 'Dollars', value: 50, nominal: ' c1234567890'},
-        {banknots: 'RUBLS', value: 100, nominal: ' r1234567890'},
-        {banknots: 'Dollars', value: 50, nominal: ' x1234567890'},
-        {banknots: 'RUBLS', value: 50, nominal: ' v1234567890'},
+    let [message, setMessage] = useState([
+        {message: 'message1'},
+        {message: 'message2'},
+        {message: 'message3'},
+        {message: 'message4'},
     ])
-    const [filter, setFilter] = useState<FilterType>('All')
-    let currentMoney = money
-    if (filter === 'RUBLS') {
-        currentMoney = money.filter((filteredMoney) => filteredMoney.banknots === 'RUBLS')
+
+    let [title, setTitle] = useState('')
+
+    const addMessage = (title: string) => {
+        const newMessage = {message: title}
+        setMessage([newMessage, ...message])
     }
-    if (filter === 'Dollars') {
-        currentMoney = money.filter((filteredMoney) => filteredMoney.banknots === 'Dollars')
+    const callBackButtonHandler = () => {
+        addMessage(title)
+        setTitle('')
     }
-    const onClickFilterHandler = (nameButton: FilterType) => {
-        setFilter(nameButton)
-    }
-    return <NewComponent money={currentMoney} onClickFilterHandler={onClickFilterHandler}/>
+    return (
+        <div className='App'>
+            <Input title={title} setTitle={setTitle}/>
+            <Button name={'+'} callBack={callBackButtonHandler}/>
+            {/*<FullInput addMessage={addMessage}/>*/}
+            {message.map((elem, index) => {
+                return <div key={index}>{elem.message}</div>
+            })}
+        </div>
+    )
 }
 
 export default App;
